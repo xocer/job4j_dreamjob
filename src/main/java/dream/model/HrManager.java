@@ -1,4 +1,4 @@
-package model;
+package dream.model;
 
 public class HrManager {
 }

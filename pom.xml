@@ -19,6 +19,8 @@
     <lombok-version>1.18.16</lombok-version>
     <servlet-api.version>4.0.1</servlet-api.version>
     <servlet-api-jstl.version>1.2</servlet-api-jstl.version>
+    <postgresql.version>42.2.18</postgresql.version>
+    <commons-dbcp2.version>2.7.0</commons-dbcp2.version>
   </properties>
 
   <dependencies>
@@ -43,6 +45,19 @@
       <groupId>javax.servlet</groupId>
       <artifactId>jstl</artifactId>
       <version>${servlet-api-jstl.version}</version>
+    </dependency>
+
+    <!-- POSTGRESQL -->
+    <dependency>
+      <groupId>org.postgresql</groupId>
+      <artifactId>postgresql</artifactId>
+      <version>${postgresql.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-dbcp2</artifactId>
+      <version>${commons-dbcp2.version}</version>
     </dependency>
   </dependencies>
 

@@ -17,7 +17,8 @@
     <maven.compiler.target>15</maven.compiler.target>
 
     <lombok-version>1.18.16</lombok-version>
-    <javax.servlet-api.version>4.0.1</javax.servlet-api.version>
+    <servlet-api.version>4.0.1</servlet-api.version>
+    <servlet-api-jstl.version>1.2</servlet-api-jstl.version>
   </properties>
 
   <dependencies>
@@ -33,8 +34,15 @@
     <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>javax.servlet-api</artifactId>
-      <version>${javax.servlet-api.version}</version>
+      <version>${servlet-api.version}</version>
       <scope>provided</scope>
+    </dependency>
+
+    <!-- JSTL -->
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>jstl</artifactId>
+      <version>${servlet-api-jstl.version}</version>
     </dependency>
   </dependencies>
 

@@ -1,8 +1,9 @@
 package dream.store;
 
-import org.apache.commons.dbcp2.BasicDataSource;
 import dream.model.Candidate;
 import dream.model.Post;
+import org.apache.commons.dbcp2.BasicDataSource;
+import org.slf4j.Logger;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -18,6 +19,7 @@ import java.util.Properties;
 public class PsqlStore implements Store {
 
     private final BasicDataSource pool = new BasicDataSource();
+    private static final Logger log = org.slf4j.LoggerFactory.getLogger(PsqlStore.class);
 
     private PsqlStore() {
         Properties cfg = new Properties();
@@ -93,6 +95,15 @@ public class PsqlStore implements Store {
         }
     }
 
+    @Override
+    public void save(Candidate candidate) {
+        if (candidate.getId() == 0) {
+            create(candidate);
+        } else {
+            update(candidate);
+        }
+    }
+
     private Post create(Post post) {
         try (Connection cn = pool.getConnection();
              PreparedStatement ps =  cn.prepareStatement("INSERT INTO post(name) VALUES (?)", PreparedStatement.RETURN_GENERATED_KEYS)
@@ -110,6 +121,34 @@ public class PsqlStore implements Store {
         return post;
     }
 
+    private Candidate create(Candidate candidate) {
+        try (Connection cn = pool.getConnection();
+             PreparedStatement ps =  cn.prepareStatement("INSERT INTO candidate(name) VALUES (?)", PreparedStatement.RETURN_GENERATED_KEYS)
+        ) {
+            ps.setString(1, candidate.getName());
+            ps.execute();
+            try (ResultSet id = ps.getGeneratedKeys()) {
+                if (id.next()) {
+                    candidate.setId(id.getInt(1));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return candidate;
+    }
+
+    private void update(Candidate candidate) {
+        try (Connection cn = pool.getConnection();
+             PreparedStatement ps = cn.prepareStatement("UPDATE candidate SET name=? WHERE id=?")) {
+            ps.setString(1, candidate.getName());
+            ps.setInt(2, candidate.getId());
+            ps.execute();
+        } catch (SQLException throwables) {
+            log.error("error", throwables);
+        }
+    }
+
     private void update(Post post) {
         try (Connection cn = pool.getConnection();
              PreparedStatement ps = cn.prepareStatement("UPDATE post SET name=? WHERE id=?")) {
@@ -117,9 +156,8 @@ public class PsqlStore implements Store {
             ps.setInt(2, post.getId());
             ps.execute();
         } catch (SQLException throwables) {
-            throwables.printStackTrace();
+            log.error("error", throwables);
         }
-
     }
 
     @Override
@@ -134,8 +172,25 @@ public class PsqlStore implements Store {
                 post.setName(resultSet.getString(2));
             }
         } catch (SQLException throwables) {
-            throwables.printStackTrace();
+            log.error("error", throwables);
         }
         return post;
+    }
+
+    @Override
+    public Candidate findCandidateById(int id) {
+        Candidate candidate = new Candidate(0, "");
+        try (Connection cn = pool.getConnection();
+             PreparedStatement ps = cn.prepareStatement("SELECT * FROM candidate WHERE id=?")){
+            ps.setInt(1, id);
+            ResultSet resultSet = ps.executeQuery();
+            if (resultSet.next()) {
+                candidate.setId(resultSet.getInt(1));
+                candidate.setName(resultSet.getString(2));
+            }
+        } catch (SQLException throwables) {
+            log.error("error", throwables);
+        }
+        return candidate;
     }
 }

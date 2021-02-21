@@ -3,7 +3,8 @@ package dream.store;
 import dream.model.Candidate;
 import dream.model.Post;
 import org.apache.commons.dbcp2.BasicDataSource;
-import org.slf4j.Logger;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -19,7 +20,7 @@ import java.util.Properties;
 public class PsqlStore implements Store {
 
     private final BasicDataSource pool = new BasicDataSource();
-    private static final Logger log = org.slf4j.LoggerFactory.getLogger(PsqlStore.class);
+    private static final Logger LOG = LogManager.getLogger(PsqlStore.class.getName());
 
     private PsqlStore() {
         Properties cfg = new Properties();
@@ -145,7 +146,7 @@ public class PsqlStore implements Store {
             ps.setInt(2, candidate.getId());
             ps.execute();
         } catch (SQLException throwables) {
-            log.error("error", throwables);
+            LOG.error("error", throwables);
         }
     }
 
@@ -156,7 +157,7 @@ public class PsqlStore implements Store {
             ps.setInt(2, post.getId());
             ps.execute();
         } catch (SQLException throwables) {
-            log.error("error", throwables);
+            LOG.error("error", throwables);
         }
     }
 
@@ -172,7 +173,7 @@ public class PsqlStore implements Store {
                 post.setName(resultSet.getString(2));
             }
         } catch (SQLException throwables) {
-            log.error("error", throwables);
+            LOG.error("error", throwables);
         }
         return post;
     }
@@ -189,7 +190,7 @@ public class PsqlStore implements Store {
                 candidate.setName(resultSet.getString(2));
             }
         } catch (SQLException throwables) {
-            log.error("error", throwables);
+            LOG.error("error", throwables);
         }
         return candidate;
     }

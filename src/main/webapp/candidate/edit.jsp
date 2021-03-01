@@ -30,7 +30,7 @@
 <body>
 <%
     String id = request.getParameter("id");
-    Candidate candidate = new Candidate(0, "");
+    Candidate candidate = new Candidate(0, "", 0);
     if (id != null) {
         candidate = PsqlStore.instOf().findCandidateById(Integer.valueOf(id));
     }
@@ -51,6 +51,9 @@
                         <label>Имя</label>
                         <input type="text" class="form-control" name="name" value="<%=candidate.getName()%>">
                     </div>
+                    <p>
+                        <a href="<%=request.getContextPath()%>/upload.jsp?id=<%=candidate.getId()%>">Добавить фото</a>
+                    </p>
                     <button type="submit" class="btn btn-primary">Сохранить</button>
                 </form>
             </div>

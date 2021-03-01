@@ -1,6 +1,4 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
-<%@ page import="dream.store.MemStore" %>
-<%@ page import="dream.model.Candidate" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core" %>
 
 <!doctype html>
@@ -35,6 +33,9 @@
                     <thead>
                     <tr>
                         <th scope="col">Названия</th>
+                        <th scope="col">Фотография</th>
+                        <th scope="col">Загрузить картинку</th>
+                        <th scope="col">Удалить</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -45,6 +46,19 @@
                                     <i class="fa fa-edit mr-3"></i>
                                 </a>
                                 <c:out value="${can.name}"/>
+                            </td>
+                            <td>
+                                <c:if test="${can.photo_id > 0}">
+                                    <img src ="<c:url value="/download?id=${can.photo_id}"/>" width="80" height="110">
+                                </c:if>
+                            </td>
+                            <td>
+                                <a href="<c:url value="/download?id=${can.photo_id}"/>">Download</a>
+                            </td>
+                            <td>
+                                <a href="<c:url value="/delete?id=${can.id}"/>">
+                                    <i class="fa fa-times-circle" aria-hidden="true"></i>
+                                </a>
                             </td>
                         </tr>
                     </c:forEach>

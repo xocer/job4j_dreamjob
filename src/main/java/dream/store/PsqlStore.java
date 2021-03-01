@@ -78,7 +78,7 @@ public class PsqlStore implements Store {
         ) {
             try (ResultSet it = ps.executeQuery()) {
                 while (it.next()) {
-                    candidates.add(new Candidate(it.getInt("id"), it.getString("name")));
+                    candidates.add(new Candidate(it.getInt("id"), it.getString("name"), it.getInt("photo_id")));
                 }
             }
         } catch (Exception e) {
@@ -162,7 +162,7 @@ public class PsqlStore implements Store {
     }
 
     @Override
-    public Post findById(int id) {
+    public Post findPostById(int id) {
         Post post = new Post(0, "");
         try (Connection cn = pool.getConnection();
             PreparedStatement ps = cn.prepareStatement("SELECT * FROM post WHERE id=?")){
@@ -182,16 +182,81 @@ public class PsqlStore implements Store {
     public Candidate findCandidateById(int id) {
         Candidate candidate = new Candidate(0, "");
         try (Connection cn = pool.getConnection();
-             PreparedStatement ps = cn.prepareStatement("SELECT * FROM candidate WHERE id=?")){
+             PreparedStatement ps = cn.prepareStatement("SELECT * FROM candidate WHERE id=?")) {
             ps.setInt(1, id);
             ResultSet resultSet = ps.executeQuery();
             if (resultSet.next()) {
                 candidate.setId(resultSet.getInt(1));
                 candidate.setName(resultSet.getString(2));
+                candidate.setPhoto_id(resultSet.getInt(3));
             }
         } catch (SQLException throwables) {
             LOG.error("error", throwables);
         }
         return candidate;
+    }
+
+    @Override
+    public void addPhoto(int id, String path) {
+        try (Connection cn = pool.getConnection();
+             PreparedStatement ps = cn.prepareStatement("INSERT INTO photo(name) VALUES (?)", PreparedStatement.RETURN_GENERATED_KEYS)) {
+            ps.setString(1, path);
+            ps.execute();
+            int photo_id = 0;
+            try (ResultSet resultSet = ps.getGeneratedKeys()) {
+                if (resultSet.next()) {
+                    photo_id = resultSet.getInt(1);
+                }
+            }
+            try (PreparedStatement preparedStatement = cn.prepareStatement(
+                    "update candidate set photo_id=? where candidate.id=?"
+            )) {
+                preparedStatement.setInt(1, photo_id);
+                preparedStatement.setInt(2, id);
+                preparedStatement.execute();
+            }
+        } catch (SQLException throwables) {
+            LOG.error("error in addPhoto");
+        }
+    }
+
+    @Override
+    public String getPathPhoto(int id) {
+        String answer = "";
+        try (Connection cn = pool.getConnection();
+             PreparedStatement ps = cn.prepareStatement("select name from photo where photo.id=?")) {
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                answer = rs.getString(1);
+            }
+        } catch (SQLException throwables) {
+            LOG.error("error in getPathPhoto");
+        }
+        return answer;
+    }
+
+    @Override
+    public void delete(int id) {
+        int photoId = PsqlStore.instOf().findCandidateById(id).getPhoto_id();
+        try (Connection cn = pool.getConnection();
+             PreparedStatement pr = cn.prepareStatement(
+                     "DELETE FROM candidate where id=?"
+             )) {
+            pr.setInt(1, id);
+            pr.execute();
+
+
+            if (photoId > 0) {
+                try (PreparedStatement preparedStatement = cn.prepareStatement(
+                        "DELETE FROM photo WHERE id=?"
+                )) {
+                    preparedStatement.setInt(1, photoId);
+                    preparedStatement.execute();
+                }
+            }
+        } catch (SQLException throwables) {
+            LOG.error("error in Delete method");
+        }
     }
 }

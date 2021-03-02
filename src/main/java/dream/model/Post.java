@@ -6,7 +6,7 @@ import lombok.EqualsAndHashCode;
 import java.time.LocalDate;
 
 @Data
-@EqualsAndHashCode(exclude = "id")
+@EqualsAndHashCode(of = "id")
 public class Post {
     private int id;
     private String name;

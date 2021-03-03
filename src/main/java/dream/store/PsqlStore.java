@@ -269,8 +269,8 @@ public class PsqlStore implements Store {
                      PreparedStatement.RETURN_GENERATED_KEYS
              )) {
             preparedStatement.setString(1, user.getName());
-            preparedStatement.setString(1, user.getEmail());
-            preparedStatement.setString(1, user.getPassword());
+            preparedStatement.setString(2, user.getEmail());
+            preparedStatement.setString(3, user.getPassword());
             preparedStatement.execute();
 
             try (final var rs = preparedStatement.getGeneratedKeys()){

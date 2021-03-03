@@ -2,6 +2,7 @@ package dream.store;
 
 import dream.model.Candidate;
 import dream.model.Post;
+import dream.model.User;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -258,5 +259,20 @@ public class PsqlStore implements Store {
         } catch (SQLException throwables) {
             LOG.error("error in Delete method");
         }
+    }
+
+    @Override
+    public boolean addUser(User user) {
+        return false;
+    }
+
+    @Override
+    public boolean deleteUser(int id) {
+        return false;
+    }
+
+    @Override
+    public User findUserByEmail(String email) {
+        return null;
     }
 }

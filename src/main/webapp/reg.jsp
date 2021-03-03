@@ -1,8 +1,12 @@
-<%@ page contentType="text/html; charset=UTF-8" %>
-<%@ page import="dream.model.Candidate" %>
-<%@ page import="dream.store.PsqlStore" %>
-<!doctype html>
-<html lang="en">
+<%--
+  Created by IntelliJ IDEA.
+  User: grishinv
+  Date: 03.03.2021
+  Time: 13:24
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -26,22 +30,24 @@
     <div class="row">
         <div class="card" style="width: 100%">
             <div class="card-header">
-                Авторизация
+                Регистрация
             </div>
+
             <div class="card-body">
-                <a href="<%=request.getContextPath()%>/reg.jsp">Регистрация</a>
-            </div>
-            <div class="card-body">
-                <form action="<%=request.getContextPath()%>/auth.do" method="post">
+                <form action="<%=request.getContextPath()%>/reg.do" method="post">
                     <div class="form-group">
-                        <label>Почта</label>
+                        <label>Имя</label>
+                        <input type="text" class="form-control" name="name">
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
                         <input type="text" class="form-control" name="email">
                     </div>
                     <div class="form-group">
                         <label>Пароль</label>
                         <input type="text" class="form-control" name="password">
                     </div>
-                    <button type="submit" class="btn btn-primary">Войти</button>
+                    <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
                 </form>
             </div>
         </div>

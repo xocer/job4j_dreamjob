@@ -29,5 +29,5 @@ public interface Store {
 
     boolean deleteUser(int id);
 
-    User findByEmail(String email);
+    User findUserByEmail(String email);
 }

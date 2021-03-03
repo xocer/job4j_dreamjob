@@ -263,16 +263,59 @@ public class PsqlStore implements Store {
 
     @Override
     public boolean addUser(User user) {
+        try (var connection = pool.getConnection();
+             final var preparedStatement = connection.prepareStatement(
+                     "insert into users(name, email, password) values (?, ?, ?)",
+                     PreparedStatement.RETURN_GENERATED_KEYS
+             )) {
+            preparedStatement.setString(1, user.getName());
+            preparedStatement.setString(1, user.getEmail());
+            preparedStatement.setString(1, user.getPassword());
+            preparedStatement.execute();
+
+            try (final var rs = preparedStatement.getGeneratedKeys()){
+                if (rs.next()) {
+                    user.setId(rs.getInt(1));
+                }
+            }
+            return true;
+
+        } catch (SQLException throwables) {
+            LOG.error("error in AddUser method");
+        }
         return false;
     }
 
     @Override
     public boolean deleteUser(int id) {
+        try (final var connection = pool.getConnection();
+             final PreparedStatement preparedStatement = connection.prepareStatement(
+                     "delete from users where users.id=?")) {
+            preparedStatement.setInt(1, id);
+            return preparedStatement.execute();
+        } catch (SQLException throwables) {
+            LOG.error("error in AddUser method");
+        }
         return false;
     }
 
     @Override
     public User findUserByEmail(String email) {
-        return null;
+        final var user = new User(0, "", "", "");
+        try (final var connection = pool.getConnection();
+             final PreparedStatement preparedStatement = connection.prepareStatement(
+                     "select * from users where users.email=?")) {
+            preparedStatement.setString(1, email);
+            final var resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                user.setId(resultSet.getInt(1));
+                user.setName(resultSet.getString(2));
+                user.setEmail(resultSet.getString(3));
+                user.setPassword(resultSet.getString(4));
+            }
+        } catch (SQLException throwables) {
+            LOG.error("error in AddUser method");
+        }
+        return user;
     }
 }

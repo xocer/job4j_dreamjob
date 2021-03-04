@@ -301,7 +301,7 @@ public class PsqlStore implements Store {
 
     @Override
     public User findUserByEmail(String email) {
-        final var user = new User(0, "", "", "");
+        final User user = new User();
         try (final var connection = pool.getConnection();
              final PreparedStatement preparedStatement = connection.prepareStatement(
                      "select * from users where users.email=?")) {

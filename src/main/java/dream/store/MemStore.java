@@ -2,13 +2,14 @@ package dream.store;
 
 import dream.model.Candidate;
 import dream.model.Post;
+import dream.model.User;
 
 import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class MemStore {
+public class MemStore implements Store{
 
     private static final MemStore INST = new MemStore();
     private static AtomicInteger POST_ID = new AtomicInteger(4);
@@ -45,12 +46,47 @@ public class MemStore {
         candidates.put(candidate.getId(), candidate);
     }
 
+    @Override
+    public Post findPostById(int id) {
+        return posts.get(4);
+    }
+
     public Post findById(int id) {
         return posts.get(id);
     }
 
     public Candidate findCandidateById(int id) {
         return candidates.get(id);
+    }
+
+    @Override
+    public void addPhoto(int id, String path) {
+
+    }
+
+    @Override
+    public String getPathPhoto(int id) {
+        return null;
+    }
+
+    @Override
+    public void delete(int id) {
+
+    }
+
+    @Override
+    public boolean addUser(User user) {
+        return false;
+    }
+
+    @Override
+    public boolean deleteUser(int id) {
+        return false;
+    }
+
+    @Override
+    public User findUserByEmail(String email) {
+        return null;
     }
 
     public Collection<Post> findAllPosts() {

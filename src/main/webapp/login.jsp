@@ -35,11 +35,11 @@
                 <form action="<%=request.getContextPath()%>/auth.do" method="post">
                     <div class="form-group">
                         <label>Почта</label>
-                        <input type="text" class="form-control" name="email">
+                        <input type="email" class="form-control" name="email">
                     </div>
                     <div class="form-group">
                         <label>Пароль</label>
-                        <input type="text" class="form-control" name="password">
+                        <input type="password" class="form-control" name="password">
                     </div>
                     <button type="submit" class="btn btn-primary">Войти</button>
                 </form>

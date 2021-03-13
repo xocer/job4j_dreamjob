@@ -16,6 +16,11 @@
   </filter-mapping>
 
   <servlet>
+    <servlet-name>GreetingServlet</servlet-name>
+    <servlet-class>dream.servlet.GreetingServlet</servlet-class>
+  </servlet>
+
+  <servlet>
     <servlet-name>PostServlet</servlet-name>
     <servlet-class>dream.servlet.PostServlet</servlet-class>
   </servlet>
@@ -54,6 +59,11 @@
     <servlet-name>RegServlet</servlet-name>
     <servlet-class>dream.servlet.RegServlet</servlet-class>
   </servlet>
+
+  <servlet-mapping>
+    <servlet-name>GreetingServlet</servlet-name>
+    <url-pattern>/greet</url-pattern>
+  </servlet-mapping>
 
   <servlet-mapping>
     <servlet-name>RegServlet</servlet-name>

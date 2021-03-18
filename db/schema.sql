@@ -6,12 +6,19 @@ CREATE TABLE post (
 CREATE TABLE candidate (
                       id SERIAL PRIMARY KEY,
                       name TEXT,
-                      photo_id int DEFAULT 0
+                      photo_id int DEFAULT 0,
+                      city_id int DEFAULT 0
 );
 
 CREATE TABLE photo (
                     id SERIAL PRIMARY KEY,
                     name TEXT
+);
+
+CREATE TABLE city
+(
+    id   SERIAL PRIMARY KEY,
+    name TEXT
 );
 
 CREATE TABLE users (

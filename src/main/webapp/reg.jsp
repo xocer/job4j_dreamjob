@@ -22,6 +22,36 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
             integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+
+    <script>
+        function checkReg() {
+            if (validate()) {
+                $('#my_form').submit();
+            }
+        }
+
+        function validate() {
+            let flag = true;
+            let name = $('#name').val();
+            let email = $('#email').val();
+            let password = $('#password').val();
+            if (name === '') {
+                alert($('#name').attr('title'));
+                flag = false;
+            }
+            if (email === '') {
+                alert($('#email').attr('title'));
+                flag = false;
+            }
+            if (password === '') {
+                alert($('#password').attr('title'));
+                flag = false;
+            }
+            return flag;
+        }
+    </script>
+
     <title>Работа мечты</title>
 </head>
 <body>
@@ -34,20 +64,20 @@
             </div>
 
             <div class="card-body">
-                <form action="<%=request.getContextPath()%>/reg.do" method="post">
+                <form id="my_form" action="<%=request.getContextPath()%>/reg.do" method="post">
                     <div class="form-group">
-                        <label>Имя</label>
-                        <input type="text" class="form-control" name="name">
+                        <label for="name">Имя</label>
+                        <input type="text" class="form-control" name="name" title="Вы не ввели имя" id="name">
                     </div>
                     <div class="form-group">
-                        <label>Email</label>
-                        <input type="text" class="form-control" name="email">
+                        <label for="email">Email</label>
+                        <input type="email" class="form-control" name="email" title="Вы не ввели email" id="email">
                     </div>
                     <div class="form-group">
-                        <label>Пароль</label>
-                        <input type="text" class="form-control" name="password">
+                        <label for="password">Пароль</label>
+                        <input type="password" class="form-control" name="password" title="Вы не ввели пароль" id="password">
                     </div>
-                    <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
+                    <button type="button" onclick="return checkReg();" class="btn btn-primary">Зарегистрироваться</button>
                 </form>
             </div>
         </div>

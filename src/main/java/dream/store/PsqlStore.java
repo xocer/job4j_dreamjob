@@ -1,6 +1,7 @@
 package dream.store;
 
 import dream.model.Candidate;
+import dream.model.City;
 import dream.model.Post;
 import dream.model.User;
 import org.apache.commons.dbcp2.BasicDataSource;
@@ -79,7 +80,11 @@ public class PsqlStore implements Store {
         ) {
             try (ResultSet it = ps.executeQuery()) {
                 while (it.next()) {
-                    candidates.add(new Candidate(it.getInt("id"), it.getString("name"), it.getInt("photo_id")));
+                    candidates.add(new Candidate(
+                            it.getInt("id"),
+                            it.getString("name"),
+                            it.getInt("photo_id"),
+                            it.getInt("city_id")));
                 }
             }
         } catch (Exception e) {
@@ -125,9 +130,11 @@ public class PsqlStore implements Store {
 
     private Candidate create(Candidate candidate) {
         try (Connection cn = pool.getConnection();
-             PreparedStatement ps =  cn.prepareStatement("INSERT INTO candidate(name) VALUES (?)", PreparedStatement.RETURN_GENERATED_KEYS)
+             PreparedStatement ps =  cn.prepareStatement("INSERT INTO candidate(name, photo_id, city_id) VALUES (?, ?, ?)", PreparedStatement.RETURN_GENERATED_KEYS)
         ) {
             ps.setString(1, candidate.getName());
+            ps.setInt(2, candidate.getPhoto_id());
+            ps.setInt(3, candidate.getCity_id());
             ps.execute();
             try (ResultSet id = ps.getGeneratedKeys()) {
                 if (id.next()) {
@@ -190,6 +197,7 @@ public class PsqlStore implements Store {
                 candidate.setId(resultSet.getInt(1));
                 candidate.setName(resultSet.getString(2));
                 candidate.setPhoto_id(resultSet.getInt(3));
+                candidate.setCity_id(resultSet.getInt(4));
             }
         } catch (SQLException throwables) {
             LOG.error("error", throwables);
@@ -317,5 +325,22 @@ public class PsqlStore implements Store {
             LOG.error("error in AddUser method");
         }
         return user;
+    }
+
+    @Override
+    public List<City> findAllCity() {
+        List<City> cities = new ArrayList<>();
+        try (Connection cn = pool.getConnection();
+             PreparedStatement ps =  cn.prepareStatement("SELECT * FROM city")
+        ) {
+            try (ResultSet it = ps.executeQuery()) {
+                while (it.next()) {
+                    cities.add(new City(it.getInt("id"), it.getString("name")));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return cities;
     }
 }

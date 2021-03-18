@@ -20,10 +20,10 @@ public class AuthServlet extends HttpServlet {
                 HttpSession sc = req.getSession();
                 sc.setAttribute("user", user);
                 resp.sendRedirect(req.getContextPath() + "/posts.do");
+            } else {
+                req.setAttribute("error", "Не верный email или пароль");
+                req.getRequestDispatcher("login.jsp").forward(req, resp);
             }
-        } else {
-            req.setAttribute("error", "Не верный email или пароль");
-            req.getRequestDispatcher("login.jsp").forward(req, resp);
         }
     }
 }

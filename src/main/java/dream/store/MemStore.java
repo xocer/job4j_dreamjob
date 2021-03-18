@@ -1,10 +1,12 @@
 package dream.store;
 
 import dream.model.Candidate;
+import dream.model.City;
 import dream.model.Post;
 import dream.model.User;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -86,6 +88,11 @@ public class MemStore implements Store{
 
     @Override
     public User findUserByEmail(String email) {
+        return null;
+    }
+
+    @Override
+    public List<City> findAllCity() {
         return null;
     }
 

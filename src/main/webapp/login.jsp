@@ -18,6 +18,30 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
             integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 
+    <script>
+        function checkLog() {
+            if (validate()) {
+                $('#my_form').submit();
+            }
+        }
+
+        function validate() {
+            let flag = true;
+            let email = $('#email').val();
+            let password = $('#password').val();
+
+            if (email === '') {
+                alert($('#email').attr('title'));
+                flag = false;
+            }
+            if (password === '') {
+                alert($('#password').attr('title'));
+                flag = false;
+            }
+            return flag;
+        }
+    </script>
+
     <title>Работа мечты</title>
 </head>
 <body>
@@ -32,16 +56,16 @@
                 <a href="<%=request.getContextPath()%>/reg.jsp">Регистрация</a>
             </div>
             <div class="card-body">
-                <form action="<%=request.getContextPath()%>/auth.do" method="post">
+                <form id="my_form" action="<%=request.getContextPath()%>/auth.do" method="post">
                     <div class="form-group">
-                        <label>Почта</label>
-                        <input type="email" class="form-control" name="email">
+                        <label for="email">Почта</label>
+                        <input type="email" class="form-control" name="email" id="email" title="Вы не ввели email">
                     </div>
                     <div class="form-group">
-                        <label>Пароль</label>
-                        <input type="password" class="form-control" name="password">
+                        <label for="password">Пароль</label>
+                        <input type="password" class="form-control" name="password" id="password" title="Вы не ввели пароль">
                     </div>
-                    <button type="submit" class="btn btn-primary">Войти</button>
+                    <button type="button" onclick="checkLog();" class="btn btn-primary">Войти</button>
                 </form>
             </div>
         </div>

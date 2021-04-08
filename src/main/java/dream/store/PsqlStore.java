@@ -339,7 +339,7 @@ public class PsqlStore implements Store {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error("error in findAllCity");
         }
         return cities;
     }
